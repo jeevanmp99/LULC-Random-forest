@@ -56,13 +56,96 @@ All must share **identical CRS** (e.g., EPSG:4326 or UTM Zone).
 * No shift in pixel alignment
 * The rasters must have the **same pixel dimensions (rows/columns)**
 
-#### **4. Training Shapefile Requirements**
+Here is the **corrected and improved description** for your GitHub README, based on your new requirement:
 
-Your training dataset must:
+✅ **Training data must be POINTS only**
+✅ **Left side = Land class label**
+✅ **Right side = Pixel values (Bands, DEM, Slope) extracted at each point**
 
-* Contain point or polygon samples
-* Include a **Class** field (integer labels)
-* Fall entirely within the raster extent
+You can copy-paste this into your GitHub README.
+
+---
+
+# 🎯 **4. Training Sample Requirements (Updated – Point-Based Sampling)**
+
+The classification workflow uses **point-based training data**, where each point represents a known land-cover class.
+During processing, the script extracts the raster pixel values under each point and links them to the land-cover class.
+
+### 🔹 **Training Sample Format**
+
+* File type: **Shapefile (.shp)**
+* Geometry: **Points only**
+* Projection: **Same CRS as the rasters**
+* Attribute field:
+
+  * **Class** → integer representing the land cover class
+
+Example:
+
+| Point_ID | Class          | Geometry    |
+| -------- | -------------- | ----------- |
+| 1        | 1 (Water)      | POINT(x, y) |
+| 2        | 3 (Vegetation) | POINT(x, y) |
+| 3        | 5 (Barren)     | POINT(x, y) |
+
+---
+
+# 📌 **How the Training Data Will Be Used**
+
+For every point, the script extracts:
+
+```
+Band1, Band2, Band3, Band4, Band5, Band6, Band7, DEM, Slope
+```
+
+So the extracted dataset (training table) will look like:
+
+| Class      | Band1 | Band2 | Band3 | Band4 | Band5 | Band6 | Band7 | DEM | Slope |
+| ---------- | ----- | ----- | ----- | ----- | ----- | ----- | ----- | --- | ----- |
+| Barren     | 123   | 98    | 76    | 45    | 23    | 12    | 5     | 255 | 14    |
+| Vegetation | 45    | 63    | 88    | 123   | 145   | 110   | 95    | 300 | 9     |
+| Water      | 10    | 20    | 25    | 30    | 15    | 10    | 8     | 201 | 2     |
+
+**Left side = land class (label)**
+**Right side = pixel values extracted from rasters**
+
+This table is automatically created during the script execution.
+
+---
+
+# ✔ Training Data Requirements Summary
+
+### Your shapefile must contain:
+
+* **Points** (NOT polygons)
+* A field named **Class**
+* Coordinates within the raster boundary
+* Same CRS as:
+
+  * Landsat/Sentinel composite
+  * DEM
+  * Slope raster
+
+### Points should be well distributed across:
+
+* Water
+* Vegetation
+* Built-up
+* Agriculture
+* Barren
+* Forest
+* Any classes you include
+
+---
+
+# 🧭 Why Point Samples?
+
+Point-based sampling is preferred because:
+
+* It avoids polygon boundary errors
+* Ensures 1-to-1 pixel–class mapping
+* Works perfectly with rasterio & machine learning models
+* Faster, cleaner, less RAM usage
 
 ---
 
@@ -70,12 +153,15 @@ Your training dataset must:
 
 ```
 project/
-├── composite16_cliped.tif      # Landsat image
-├── TRAIN_2016_3.shp            # Training samples
-├── dem_resamp.tif              # DEM resampled to Landsat resolution
-├── slope_resamp.tif            # Slope map (derived from DEM)
-└── classify.py                 # Main script
-```
+├── data/
+│   ├── satellite_image.tif        # Multispectral raster
+│   ├── dem_resampled.tif          # DEM matched to satellite resolution
+│   ├── slope_resampled.tif        # Slope derived from DEM
+│   ├── training_samples.shp       # LULC training data
+│   └── (other optional layers)
+├── src/
+│   └── lulc_classification.py     # Main script
+└── README.md
 
 ---
 
@@ -84,10 +170,10 @@ project/
 ### 1. Update file paths in the script:
 
 ```python
-landsat_path = '/path/to/composite16_cliped.tif'
-train_shp_path = '/path/to/TRAIN_2016_3.shp'
-dem_path = '/path/to/dem_resamp.tif'
-slope_path = '/path/to/slope_resamp.tif'
+landsat composite image path 
+training sample path
+dem path 
+slope path
 ```
 
 ### 2. Run the script:
