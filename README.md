@@ -62,7 +62,6 @@ Here is the **corrected and improved description** for your GitHub README, based
 ✅ **Left side = Land class label**
 ✅ **Right side = Pixel values (Bands, DEM, Slope) extracted at each point**
 
-You can copy-paste this into your GitHub README.
 
 ---
 
