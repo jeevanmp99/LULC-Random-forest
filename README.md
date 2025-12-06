@@ -65,7 +65,7 @@ Here is the **corrected and improved description** for your GitHub README, based
 
 ---
 
-# 🎯 **4. Training Sample Requirements (Updated – Point-Based Sampling)**
+# 🎯 **4. Training Sample Requirements (Point-Based Sampling)**
 
 The classification workflow uses **point-based training data**, where each point represents a known land-cover class.
 During processing, the script extracts the raster pixel values under each point and links them to the land-cover class.
