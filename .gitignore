@@ -1,0 +1,22 @@
+# Python bytecode & environments
+__pycache__/
+*.py[cod]
+*$py.class
+.venv/
+env/
+venv/
+
+# Jupyter & Colab cache
+.ipynb_checkpoints/
+.colab/
+
+# Geospatial temp files & large predictions
+*.tif.aux.xml
+*.cpg
+*.lock
+LULC_2016*.tif
+output/
+
+# OS specific
+.DS_Store
+Thumbs.db
